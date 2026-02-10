@@ -204,3 +204,17 @@ tempo.yml > config > listen port 3100 , block duration , block bytes
 4. docker-compose > env varble > set > opentelemty and tempo
 5. Jager and Zipking > drawback > they dont have good info with log integration
 
+
+################## Grapahana Dashboard ############
+CPU usage by POD > avg , min , max > Tags > cluster:shared-aks-qa
+CPU usage by Node > avg , min , max > Tags >
+Memory > POD : podname and container > contid
+CPU usage POD and Memony% POD
+SLO : NAme , Time , Target , status and Error budget
+Type , name , time target status eror budget
+
+################ change management ##############
+Prod Install
+1.change managemnt info
+- Create install plan
+- validation plan

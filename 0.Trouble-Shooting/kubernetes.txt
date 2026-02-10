@@ -1,0 +1,49 @@
+Kubernetes
+Loggin in
+kconnect use eks --username --role --passoword
+set context
+kubectl config set-context --current --namespace=pr000002-dev
+
+Common commands
+kubectl  get pods
+kubectl logs <pod name>
+kubectl describe pod <podname>
+kubectl delete pod <podname>
+kubectl -n pr000002-dev get secrets|findstr <apr#>
+kubectl -n pr0000002-dev edit secrets <podname>
+kubectl get ingress | findstr <app_id>
+kubectl edit ingress <ingress name>
+kubectl get deployment | findstr <app_id>
+
+Login to pod
+kubectl exec -it pod_name -n <namespace> -- /bin/bash
+
+Login to k8s cluster : login to pods , update api-endpoint
+k connect use eks --idp--protocol saml --role-arn --username --region
+
+create yaml file and firecall custom resource
+cat > /tmp/firecall.yaml
+apiverion: ecc/v1aplha1
+kind:Execpass
+metadata
+name:execpass
+spec:
+reason
+service-now-ticket
+duration
+
+create a firecall resource
+
+login to pod
+
+df -h
+ps aux
+python --version
+java --version
+
+
+K8s Failures
+1.Image pull backoff : pull container image for prod
+2.Crash loop bacloff : container inside pod crashes > k8s cannot run the app > config issues in pod.yml
+3.Exit code 1 : Occurs when the container in a pod exists with non zero status code > container encounter error unable to start
+4.Not ready : Occurs when node is not ready to recive the pod
