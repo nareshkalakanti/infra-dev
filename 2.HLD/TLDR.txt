@@ -1,0 +1,32 @@
+1. Latency vs Throughput
+2. CI/CD Pipeline : From Gitpush to production
+3. AWS Architecture
+4. Docker
+5. Sagemaker vs Bedrock
+6. Laod Balancer : L4 and L7
+7. Session Flow vs JWT flow
+8. System Design => Assumptions vs reality
+9. TF vs Ansible
+10. Vector DB
+11. Access Token Vs Refesh Token
+12. REST vs gRPC
+13. Docker vs K8s
+14. Langchain vs Langgraph vs MCP
+15. How does app work using reverse proxy vs load balancer vs API gateway
+16. KAFKA vs RABBIT MQ VS SQS
+17. Loadbalancer vs API GW
+18 . Redis for processing request
+19. GCP cloud Architechture
+20. Deployment stratergy : rolling updates vs Blue green vs cannary
+21. MLops : ML flow > kubeflow > Containerization  > K8s > Serving API > Monitoring
+22. Monolith vs Microservice
+23. Azure Cloud Architechture
+24. K8s Features
+25. Iac
+26. Event driven architechture
+27. Gen AI : Embeddings vs Vector DB
+28. Webhook
+29. Scaling
+30. cdn
+31. serverless
+

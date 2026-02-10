@@ -1,0 +1,56 @@
+DevSecOps : TF,k8s,Jenkins & AWS
+1.Dev + Sec + Operations
+<--------------------------
+shift left
+================================
+2. Security at SDLC phase
+3. Shift left approach : very early as possible we r checking in SDLC
+SAST : Static application security testing
+Synk : SCA : Software composition analysis scan
+ECR : Build docker image and push
+EKS : deploy to K8s
+OWSAP : DAST SCAN
+
+Example : working on credit crad app we would like to make sure its PCI DSS compliant
+=====================================================================================
+
+Development :
+- git secrets
+- plugins (VScode)
+- Truflehog
+
+Security :
+code quality scan (sonarqube)
+SAST security tool (checkmarx) : white box testing
+SCA : (blackduck and Synk) : opensource :licening , complaince and sec vulnarabilities
+DAST : Dynamic application security testing tool (OWASP) : Black box testing
+IAC Security Tool :Synk
+Container security : Qualys
+
+Operations :
+Build pipeline tools : Jenkins , Gitlab , Github Actions
+Cloud security Posture : Aqua , Bridge queue => define standards accross infra + which tests are failings
+Container scanning registry tools : Aqua , AWS. Native reg
+
+
+
+
+Jenkinsfile
+tools {
+maven :
+}
+stages {
+  stage('Compile and run code analysis') {
+    sh """
+      mvn clean verify sonar:sonar projkey and orgkey
+    """
+  }
+  stage("RunSCAAnylysisUsing Sync) {
+    sh """"
+      mvn synk:test
+    """
+  }
+
+
+
+}
