@@ -1,0 +1,11 @@
+Linux OS: App(utilities) > Shell (used to talk to)> kernerl (c prog) > Hardware
+
+(sh) Location : /bin/sh
+Bourne again shell [Bash] : /bin/bash
+Shebang : #!/bin/bash > interpreter understand where to run
+
+Commands
+which bash
+echo "Hello world"
+mkdir
+ls
