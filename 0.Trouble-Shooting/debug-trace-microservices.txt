@@ -1,0 +1,206 @@
+How to Debug & Trace Issues in 10+ microservices : Prod stratergy
+
+Distribted system > silent > delayed
+Microservice > 1 req > lot of services it called
+####################################
+1. Logs are scattered : logs are every were each microservice has a log
+2. Requests are async : Hard to track
+3. One failure tiggers multiple failures
+4. No single place to see the full flow
+5 . Difficult to reproduce locally
+##########################################
+Startergy : 5 Pillars
+- Centralized logging
+- Corellation ids
+- Distributed tracing > Jaeger
+- Metrics & Monitoring
+- Resilience & Fail-Safe Design
+
+#############################################
+Observability [Proactive]
+- Metrics : Measurement of health of a system [CPU usage , Memory, usage and Response time]
+- logs : Recort of events accour in a system [ error , exceptions , unexpected events ]
+- Traces : Are record of a path that a request takes through a system > Track the performance of requestand to identify bottlenecks
+- ex : null pointer exceptions
+- understand internal state of the problem
+- Goal : How a system works
+- Fixing them in real time
+
+Monitoring [ REACT]
+- Checking the data available and defining alerts for known failures
+- Collects data from system to identify and troubleshoot problems
+- Track helalh of individual microservices as well overall health
+- onboarding more instances etc we can improve performace etc
+- Identify and troubleshoot the problem
+- Goal : Identify the problem
+- Reacting to problem in real time
+
+##################################
+Logging
+
+Logs : trace , debug , info , warn , error , severity
+severe events in production > execption and error
+over logging is bad
+Test and dev : debug and info
+
+
+Timestamp?
+1. what happend at this time ?
+2. which thread was processing the event ?
+3. Which user/ tenent was in the context ?
+4 we can tag severity for prod env
+
+Microservice :
+Logs from multiple containers > Centralized logging > log aggregation
+
+####################################################################
+1. First Pillar [Logs] : Loki
+- Event logs are essential for monitoring application
+Log aggregation with Grapha , Loki and Prometheus
+- Observability & Monitoring implemented in microservices , Web App or IOT
+- Graphana > Tools > secnario choose tools > Loki , promtail
+- charts , graphs , alerts
+
+Graphana Loki : Log aggegration system , centralized location
+Promtail : light weight log agent that ships logs from conatiners to loki > Alloy (replace) > log agent
+Graphana :Provides visulaization of the log lines captured within loki
+
+####################################
+Usecase > maven project
+1. open the pom.xml of all microservices
+2. update the image tag
+3. gatewayserver > folder in repo > open > application.yaml
+httplient:
+  connection-timeout:1000
+  response-timeout:2s # wait for max of 2 sec to get response from actual microservices
+4. docker-compose.yaml
+- healthcheck:
+  test: "curl --fail --silent localhost:900/actuator/health/readiness |grep UP || exit 1"
+  interval:10s
+  timeout:5s
+  retries:10s
+
+- scrape_configs:
+ jobname: flog
+ source_label: 'docker_container_name' > accounts-ms > logs related to this microservice
+ target_label:'container'
+
+5. Graphana
+   - datasoure to loki automatically created using docker compose file
+  -  fileter by selecting label
+  -  log of service with > corellation id
+  - Logs Volumes > Filter > line containes > corellation id
+
+
+###########################################################################
+2. Second Pillar [Metrics] : Prometheus
+
+- To Answer question like CPU usage ,memory usage , thread usage , error request etc
+- Numerical measurement of applications performance
+- Monitor applications health and performance as well as set alerts or notification when specific threshold is exceeded
+
+1. How to achive this ?
+ - With the help  components like springboot actuator,Micrometer , Prometheus & Graphan
+
+
+- Springboot actuator > dependency > micorservice > Tedious job with lot of URLS > JSON
+- Micrometer > format > dependency > expose monitoring system can understand > SLF4J
+- Prometeus > issue is actuator o/p is in JSON so we use Micrometer
+
+Micrometer: Vendo-neutral obervability facade
+Facade > front facing interface that will handle a lot of complexity behind the scene
+
+
+Promethues : Metrics to Insight
+Graphana : Monitoring > dashboards , alerts and notification
+
+####################################
+Usecase > maven project
+1. Add dependency for Micrometer
+2. microservice : accounts-ms > resource >application.yaml >
+  metric:
+  tags:
+  application:${spring.application.name}
+
+3 start config server + eurake service + start all microservice + gateway sever application
+ localhost:8080/actuator/metrics/process.uptime
+ localhost:8080/actuator/Prometheus
+
+4 .Prometheus.yaml
+global configs
+scrape configs
+- metrics path
+
+5.localhost:prometeus:9090/targets
+All container , microservices running container > check overall status of containers
+
+- CPU usage> system_cup_usage , process_uptime_service , threads , connection details > graph > time frame
+- Unhealth tab > dashboard > error
+
+###############################################
+Graphana :
+1. create datasource.yaml file
+2. Add promethues
+3. explore button > loki (logs) > prometeus (metrics)
+4. Metrcis> system_cup_usage > line bars , graphs
+
+=====================================================
+ALerts and Notifications
+Rule name > Graphana managed alert > Datasource > select prometeus > metric > up >job > accounts
+Reduce
+function last > below => 1
+
+Alerts to mail > create a webhook
+
+
+#####################################################################
+Tracing :
+Distributed apps > microservices >
+service A > Service B > Service C
+Time taken to travel between services
+method invoke
+to get succesful response
+
+
+How to trace ?
+- Generate unique identifier called correlation id
+- Generated for each request at the entry point of the distributed system
+- Use case
+===================
+1. Scenario inside Gateway server where at the entry point we try to generate a corelation id
+2. And same co relation id we send to accounts-ms ,  cards-ms , loans-ms
+3. Track easily track the request travelling from gw-server > accounts > cards > loans
+and we can check what exceptions it has thrown
+4. Generation correlation id and attaching the same for all logs inside our microservices network
+
+Best Practices
+=================
+1. Distribted tracing : Techique and 3 primary concepts
+a. tags : meta data > supplimentary details about span context
+span context + username (authenticated user) or identifier specific tenant
+b. trace ID : generated starting of the request > attacgedto all the logs  > collections of actions tied to request or transaction
+c. span id : each individual state of request processing > each service has its own span id
+
+
+Implement Distributed tracing in spring boot :
+- Spring cloud slueth
+- Micrometer tracing > demands lot of changes
+- Opentelemetry
+  - Easy implenentation
+  - supports lot of lang : CNFN
+  - Setup
+    - Add jar in classpath
+    - gatewayserver > pom > add > otel > 1.27.0
+    - java 17
+    - account-ms > pom > openteletry agent
+    - application.yml > add pattern > length >"%5p[${app-name},traceid,spanid] do the changes in all the services
+    - Go to gateway server or edge server and implement > mappings > logger debug("methodname start")
+
+2. Tempo : index the tracing information
+tempo.yml > config > listen port 3100 , block duration , block bytes
+
+3. Graphana > ds > tempo >
+
+4. docker-compose > env varble > set > opentelemty and tempo
+5. Jager and Zipking > drawback > they dont have good info with log integration
+
