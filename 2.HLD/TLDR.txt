@@ -15,7 +15,7 @@
 15. How does app work using reverse proxy vs load balancer vs API gateway
 16. KAFKA vs RABBIT MQ VS SQS
 17. Loadbalancer vs API GW
-18 . Redis for processing request
+18. Redis for processing request
 19. GCP cloud Architechture
 20. Deployment stratergy : rolling updates vs Blue green vs cannary
 21. MLops : ML flow > kubeflow > Containerization  > K8s > Serving API > Monitoring
