@@ -1,0 +1,6 @@
+########## Azure ClI and Powershell #####################
+az group create -l northeurope -n test-resource-group
+az group list
+az group list --query "[].{Name:name, Location:location}" --output table
+az group delete -n test-resource-group
+
