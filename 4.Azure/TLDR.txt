@@ -4,3 +4,21 @@ az group list
 az group list --query "[].{Name:name, Location:location}" --output table
 az group delete -n test-resource-group
 
+#########################Azure Storage############
+1. What it can store ?
+- Blob (Object storage for unstructured data)
+- File (SMB based file shares)
+- Table (NoSQL Key Value storage)
+- Disk (Presistent storage for unstructured data)
+
+2. Data Availability
+- LRS (Locally Redundant storage)
+- ZRS (Zero Redundant Storage)
+- GRS (Geo Redundant Storage)
+- RA-GRS (Read Access Geo Redundant Storage)
+
+3. Security ?
+- Access via RBAC
+- Encryption
+- Firewall
+- Private end points
